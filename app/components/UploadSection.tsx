@@ -20,7 +20,7 @@ const UploadSection = () => {
   const [loading, setLoading] = useState(false)
 
   // WebSocket
-  const { connected, message, sendMessage } = useGradioWebSocket(process.env.NEXT_WEBSOCKET_URL || "ws://127.0.0.1:8888/queue/join");
+  const { connected, message, sendMessage } = useGradioWebSocket(process.env.NEXT_WEBSOCKET_URL || "");
 
 
   const newHash = Math.random().toString(36).substring(2);
