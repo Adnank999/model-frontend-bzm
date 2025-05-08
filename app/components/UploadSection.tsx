@@ -120,7 +120,7 @@ const UploadSection = () => {
     } else if (step === "waiting_process_completed" && msgObj.msg === "process_completed") {
       // console.log("process completed steps")
       setSequenceResult(msgObj.output);
-      // Start second sequence
+     
       setStep("waiting_second_send_hash");
       setOpenSecondSocket(true);
     }
