@@ -20,7 +20,7 @@ const UploadSection = () => {
   const [loading, setLoading] = useState(false)
 
   // WebSocket
-  const { connected, message, sendMessage } = useGradioWebSocket(process.env.NEXT_WEBSOCKET_URL || "");
+  const { connected, message, sendMessage } = useGradioWebSocket( process.env.NEXT_PUBLIC_WEBSOCKET_URL || "");
 
 
   const newHash = Math.random().toString(36).substring(2);
@@ -152,9 +152,9 @@ const UploadSection = () => {
           "Fooocus V2",
           "Fooocus Enhance",
           "Fooocus Sharp",
-          "Foocus Photograph"
+          
         ],
-        "Extreme Speed",
+        "Quality",
         "1152×896 <span style=\"color: grey;\"> ∣ 9:7</span>",
         1,
         "png",
