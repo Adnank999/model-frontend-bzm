@@ -5,7 +5,7 @@ export function useGradioWebSocket(url: string) {
     const [message, setMessage] = useState<string | null>(null);
     const socketRef = useRef<WebSocket | null>(null);
 
-    console.log("connected to web socket secure",connected)
+    console.log("connected to web socket secure 2",connected)
     useEffect(() => {
         const ws = new window.WebSocket(url);
         socketRef.current = ws;
