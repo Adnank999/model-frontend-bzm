@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 
 export default function SecondWebSocketHandler({ fnIndex68,imagePreviewData, onProcessCompleted,setLoading,setPreview }) {
-    const { connected, message, sendMessage } = useGradioWebSocket("ws://127.0.0.1:8888/queue/join");
+    const { connected, message, sendMessage } = useGradioWebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL || "");
 
     // console.log("data2 ref",fnIndex68)
 
