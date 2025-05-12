@@ -22,7 +22,7 @@ const UploadSection = () => {
   // WebSocket
   const { connected, message, sendMessage } = useGradioWebSocket( process.env.NEXT_PUBLIC_WEBSOCKET_URL || "");
   const apiBackendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
+ 
   const newHash = Math.random().toString(36).substring(2);
   // Sequence control
   const [step, setStep] = useState<null | "idle" | "waiting_estimation" | "waiting_send_data" | "waiting_process_start" | "waiting_process_completed" | "waiting_second_send_hash" | "waiting_second_send_data" | "waiting_second_process_start" | "waiting_second_process_completed" | "done">("idle");
@@ -387,7 +387,7 @@ const UploadSection = () => {
                       {item.value.map((img, imgIndex) => (
                         <div key={imgIndex} className="image-container mb-2">
                           <img
-                            src={`${apiBackendUrl}/file=${img.name.replace(/\\/g, '/')}`}
+                           src={`${apiBackendUrl}${img.name.split("wwwroot")[1].replace(/\\/g, '/')}`}
                             alt={`Generated Image ${index + 1}`}
                             className="preview-image w-full rounded"
                           />
