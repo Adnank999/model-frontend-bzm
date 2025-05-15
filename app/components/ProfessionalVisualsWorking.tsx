@@ -29,16 +29,16 @@ const tabContent = {
   clothes: [
     {
       id: 1,
-      sampleImage: "/images/clothes/clothe1.jpg",
-      outputImage: "/images/clothes/clothe2.jpg",
+      sampleImage: "/images/clothes/clothe1.png",
+      outputImage: "/images/clothes/clothe2.png",
       title: "Clothes ",
     },
-    // {
-    //   id: 2,
-    //   sampleImage: "/placeholder.svg?height=500&width=400",
-    //   outputImage: "/placeholder.svg?height=500&width=400",
-    //   title: "Clothes 2",
-    // },
+    {
+      id: 2,
+      sampleImage: "/images/clothes/clothe3.png",
+      outputImage: "/images/clothes/clothe4.png",
+      title: "Clothes 2",
+    },
   ],
   models: [
     {
@@ -107,11 +107,11 @@ export default function ProfessionalVisualsWorking() {
           {tabContent[activeTab as keyof typeof tabContent].map((item) => (
             <div key={item.id} className="space-y-6">
               {activeTab === "sample" && <h3 className="text-2xl font-semibold text-center">{item.title}</h3>}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {/* Sample Image */}
                 <div className="space-y-3">
                   <div className="rounded-lg overflow-hidden border border-gray-200 bg-white p-4">
-                    <div className="relative h-[400px] w-full">
+                    <div className="relative h-[200px] md:h-[300px] xl:h-[400px] m w-full">
                       <Image
                         src={item.sampleImage || "/placeholder.svg"}
                         alt={`Sample image for ${item.title}`}
@@ -130,7 +130,7 @@ export default function ProfessionalVisualsWorking() {
                 {/* Output Image */}
                 <div className="space-y-3">
                   <div className="rounded-lg overflow-hidden border border-gray-200 bg-white p-4">
-                    <div className="relative h-[400px] w-full">
+                    <div className="relative h-[200px] md:h-[300px] xl:h-[400px] w-full">
                       <Image
                         src={item.outputImage || "/placeholder.svg"}
                         alt={`Output image for ${item.title}`}

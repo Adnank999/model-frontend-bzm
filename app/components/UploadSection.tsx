@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import SecondWebSocketHandler from './SecondWebSocket'
+import Image from 'next/image'
 
 const UploadSection = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -18,11 +19,14 @@ const UploadSection = () => {
   const [outputImageURL, setOutputImageURL] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState('male');
   const [loading, setLoading] = useState(false)
+  const [estimatedTime, setEstimatedTime] = useState('');
+  const [progress, setProgress] = useState(0);
+
 
   // WebSocket
-  const { connected, message, sendMessage } = useGradioWebSocket( process.env.NEXT_PUBLIC_WEBSOCKET_URL || "");
+  const { connected, message, sendMessage } = useGradioWebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL || "");
   const apiBackendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
- 
+
   const newHash = Math.random().toString(36).substring(2);
   // Sequence control
   const [step, setStep] = useState<null | "idle" | "waiting_estimation" | "waiting_send_data" | "waiting_process_start" | "waiting_process_completed" | "waiting_second_send_hash" | "waiting_second_send_data" | "waiting_second_process_start" | "waiting_second_process_completed" | "done">("idle");
@@ -47,6 +51,31 @@ const UploadSection = () => {
     setPreview(objectUrl);
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout; // Specify the type for interval
+
+    if (loading) {
+
+      const randomTime = Math.floor(Math.random() * (20 - 15 + 1)) + 15; // Generates a number between 15 and 20
+      setEstimatedTime(`${randomTime} minutes`);
+
+      // Calculate total duration in milliseconds
+      const totalDuration = randomTime * 60 * 1000; // Convert minutes to milliseconds
+      const updateInterval = totalDuration / 100; // Update progress every 1% of total duration
+
+      // Start interval to update progress
+      interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev < 100) return prev + 1; // Increment progress by 1%
+          clearInterval(interval);
+          return prev;
+        });
+      }, updateInterval); // Correctly set the interval time
+
+      return () => clearInterval(interval); // Cleanup on unmount
+    }
+  }, [loading]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -120,7 +149,7 @@ const UploadSection = () => {
     } else if (step === "waiting_process_completed" && msgObj.msg === "process_completed") {
       // console.log("process completed steps")
       setSequenceResult(msgObj.output);
-     
+
       setStep("waiting_second_send_hash");
       setOpenSecondSocket(true);
     }
@@ -135,6 +164,19 @@ const UploadSection = () => {
   const handleGenderChange = (value) => {
     setSelectedGender(value);
   };
+
+  function generateRandom19DigitNumber(): string {
+    const min = BigInt('1000000000000000000');
+    const max = BigInt('9999999999999999999');
+
+    // Generate a random BigInt between min and max
+    const randomBigInt = min + BigInt(Math.floor(Number(max - min + BigInt(1)) * Math.random()));
+
+    return randomBigInt.toString();
+  }
+
+
+
 
   // Start sequence: prepare session hash and data payloads
   const handleStartSequence = async () => {
@@ -152,13 +194,13 @@ const UploadSection = () => {
           "Fooocus V2",
           "Fooocus Enhance",
           "Fooocus Sharp",
-          
+
         ],
         "Quality",
         "1152×896 <span style=\"color: grey;\"> ∣ 9:7</span>",
         1,
         "png",
-        "8010890410716430589",
+        generateRandom19DigitNumber(),
         false,
         2,
         4,
@@ -343,9 +385,9 @@ const UploadSection = () => {
             {preview && (
               <>
                 <h3 className="text-sm font-medium mb-2">Image Preview:</h3>
-                <div className="relative aspect-video rounded-md overflow-hidden border border-gray-200">
+                <div className="relative aspect-3/2 rounded-md overflow-hidden border border-gray-200 ">
                   <div className={`relative ${loading ? 'opacity-50 blur-sm' : ''} transition-all duration-300`}>
-                    <img src={preview} alt="Preview" className="object-contain w-full h-full" />
+                    <Image src={preview} width={200} height={200} alt="Preview" className="object-contain w-full h-full" />
                     <button
                       type="button"
                       onClick={handleRemoveImage}
@@ -361,18 +403,18 @@ const UploadSection = () => {
 
 
             {loading && preview && (
-
-
-
               <div className="absolute inset-0 bg-gray-100/50 flex items-center justify-center">
                 <div className="spinner-container flex flex-col items-center gap-2">
-                  <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-solid border-gray-900 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Generating...</span>
+                  <div className="flex flex-col items-center">
+                    <div className="w-full bg-gray-300 rounded-full h-2">
+                      <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${progress}%` }}></div>
+                    </div>
+                    <span className="text-sm text-gray-700">Estimated time :{estimatedTime}</span>
+                    <span className="text-sm text-gray-700">Please Keep Patience</span>
+                  </div>
                 </div>
               </div>
-
-            )
-            }
+            )}
           </div>
 
 
@@ -386,10 +428,12 @@ const UploadSection = () => {
                     <div key={index} className="image-item mb-2">
                       {item.value.map((img, imgIndex) => (
                         <div key={imgIndex} className="image-container mb-2">
-                          <img
-                           src={`${apiBackendUrl}${img.name.split("wwwroot")[1].replace(/\\/g, '/')}`}
+                          <Image
+                            src={`${apiBackendUrl}${img.name.split("wwwroot")[1].replace(/\\/g, '/')}`}
                             alt={`Generated Image ${index + 1}`}
-                            className="preview-image w-full rounded"
+                            className="preview-image rounded"
+                            width={1152}
+                            height={886}
                           />
                         </div>
                       ))}
