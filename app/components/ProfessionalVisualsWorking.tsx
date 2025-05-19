@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils"
 
 const tabs = [
   { id: "sample", label: "Sample" },
-  { id: "clothes", label: "Clothes" },
-  { id: "models", label: "Models" },
+  // { id: "clothes", label: "Clothes" },
+  // { id: "models", label: "Models" },
 ]
 
 // Sample data for each tab
@@ -15,7 +15,7 @@ const tabContent = {
   sample: [
     {
       id: 1,
-      sampleImage: "/images/style1/sample1.jpg",
+      sampleImage: "/images/style1/sample1.png",
       outputImage: "/images/style1/sampleOutput1.png",
       title: "Sample 1",
     },
@@ -92,7 +92,7 @@ export default function ProfessionalVisualsWorking() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "px-6 py-2 rounded-md text-sm font-medium transition-colors",
+                  "px-6 py-2 rounded-md text-sm font-medium transition-colors hidden",
                   activeTab === tab.id ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900",
                 )}
               >

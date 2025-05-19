@@ -158,8 +158,8 @@ const UploadSection = () => {
 
 
   const prompt = selectedGender === 'male'
-    ? "Create a photorealistic portrait of a male model with black hair and brown eyes,capturing a full body shot inside studio lighting.She stands in a front post,exuding a sense of warmth and friendliness.The image should be in 8k HDR to ensure high quality,with a focus on realism"
-    : "Create a photorealistic portrait of a female model with black hair and brown eyes,capturing a full body shot inside studio lighting.She stands in a front post,exuding a sense of warmth and friendliness.The image should be in 8k HDR to ensure high quality,with a focus on realism";
+    ? "Create a photorealistic portrait of a male model with black hair and black natural eyes,capturing a full body shot inside studio lighting white background."
+    : "Create a photorealistic portrait of a female model with black hair and black natural eyes,capturing a full body shot inside studio lighting white background.";
 
   const handleGenderChange = (value) => {
     setSelectedGender(value);
@@ -355,6 +355,7 @@ const UploadSection = () => {
       fn_index: 68,
       session_hash: sessionHash
     };
+    
     imageAllData.current = d1;
     imagePreviewData.current = d2;
 
